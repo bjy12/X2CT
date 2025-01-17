@@ -8,13 +8,13 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import tensorboardX as tbX
+#import tensorboard as tbX
 import numpy as np
 import os
 import torch
 import torchvision.utils as vutils
 import cv2
-
+from torch.utils.tensorboard import SummaryWriter
 
 def tensor_to_image(tensor, imtype=np.uint8):
   '''
@@ -111,7 +111,7 @@ class Visualizer(object):
   Visual train process using tensorboardX
   '''
   def __init__(self, log_dir):
-    self.tb = tbX.SummaryWriter(log_dir=log_dir)
+    self.tb = SummaryWriter(log_dir=log_dir)
     self.cache = dict()
 
   def add_graph(self, model, input):

@@ -23,7 +23,8 @@ __C.XRAY2_MIN_MAX = [0, 1700]
 __C.CT_MEAN_STD = [0., 1.0]
 __C.XRAY1_MEAN_STD = [0., 1.0]
 __C.XRAY2_MEAN_STD = [0., 1.0]
-
+__C.ct_root = ''
+__C.xray_root = ''
 '''
 Network
   Generator
@@ -230,7 +231,7 @@ def cfg_from_yaml(filename):
   '''
   import yaml
   with open(filename, 'r') as f:
-    yaml_cfg = EasyDict(yaml.load(f))
+    yaml_cfg = EasyDict(yaml.load(f, Loader=yaml.FullLoader))
   _merge_a_into_b(yaml_cfg, __C)
 
 def print_easy_dict(easy_dict):

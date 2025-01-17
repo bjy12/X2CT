@@ -35,5 +35,10 @@ def get_dataset(dataset_name):
     from .data_augmentation_1030 import CT_XRAY_Data_Augmentation, CT_XRAY_Data_Test
     from .collate_fn import collate_gan
     return AlignDataSet, CT_XRAY_Data_Augmentation, CT_XRAY_Data_Test, collate_gan
+  elif dataset_name == 'align_ct_xray_views_peliv_std':
+    from .alignDataSet_pel1k import AlignPeliv1kDataSet
+    from .data_augmentation_pelivic1k import CT_XRAY_Data_Augmentation_Multi, CT_XRAY_Data_Test_Multi
+    from .collate_fn import collate_gan_custom
+    return AlignPeliv1kDataSet , CT_XRAY_Data_Augmentation_Multi , CT_XRAY_Data_Test_Multi , collate_gan_custom
   else:
     raise KeyError('Dataset class should select from align / ')

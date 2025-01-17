@@ -11,6 +11,7 @@ from __future__ import absolute_import
 import numpy as np
 import torch
 import scipy.ndimage as ndimage
+import pdb
 
 class Compose(object):
 
@@ -119,6 +120,7 @@ class Resize_image(object):
     self.size = np.array(size, dtype=np.float32)
 
   def __call__(self, img):
+    #pdb.set_trace()
     z, x, y = img.shape
     ori_shape = np.array((z, x, y), dtype=np.float32)
     resize_factor = self.size / ori_shape

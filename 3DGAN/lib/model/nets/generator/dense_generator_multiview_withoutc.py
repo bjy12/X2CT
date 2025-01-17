@@ -10,7 +10,7 @@ from __future__ import division
 
 import functools
 from lib.model.nets.generator.encoder_decoder_utils import *
-
+import pdb
 
 def UNetLike_DownStep5(input_shape, encoder_input_channels, decoder_output_channels, decoder_out_activation, encoder_norm_layer, decoder_norm_layer, upsample_mode, decoder_feature_out=False):
   # 64, 32, 16, 8, 4
@@ -279,6 +279,7 @@ class MultiView_UNetLike_DenseDimensionNet(nn.Module):
               getattr(self.view2Model, 'linker_layer' + str(i))(view2_next_input))
       view2_next_input = getattr(self.view2Model, 'encoder_layer' + str(i))(view2_next_input)
     # View 1 decoding process Part1
+    pdb.set_trace()
     view1_next_input = self.view1Model.base_link(view1_next_input.view(view1_next_input.size(0), -1))
     view1_next_input = view1_next_input.view(view1_next_input.size(0), self.view1Model.decoder_channel_list[-1], self.view1Model.decoder_begin_size,
                                              self.view1Model.decoder_begin_size, self.view1Model.decoder_begin_size)

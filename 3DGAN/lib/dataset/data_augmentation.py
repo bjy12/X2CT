@@ -11,7 +11,7 @@ from __future__ import print_function
 from lib.utils.transform_3d import *
 import torch
 import numpy as np
-
+import pdb
 
 def tensor_backto_unnormalization_image(input_image, mean, std):
   '''
@@ -155,7 +155,7 @@ class CT_XRAY_Data_TestM(object):
     '''
     return self.augment(img)
 
-class CT_XRAY_Data_Augmentation_Multi(object):
+class CT_XRAY_Data_Augmentation_Multi(object):a
   def __init__(self, opt=None):
     self.augment = List_Compose([
       (Permute((1,0,2)), None, None),
@@ -187,6 +187,7 @@ class CT_XRAY_Data_Augmentation_Multi(object):
     :param labels: numpy.ndarray
     :return:
     '''
+    
     return self.augment(img_list)
 
 class CT_XRAY_Data_Test_Multi(object):
@@ -221,6 +222,7 @@ class CT_XRAY_Data_Test_Multi(object):
     :param labels: numpy.ndarray
     :return:
     '''
+    pdb.set_trace()
     return self.augment(img)
 
 

@@ -12,7 +12,7 @@ import copy
 import torch
 import time
 import os
-
+import pdb
 
 def parse_args():
   parse = argparse.ArgumentParser(description='CTGAN')

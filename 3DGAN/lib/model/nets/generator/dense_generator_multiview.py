@@ -11,6 +11,7 @@ from __future__ import division
 import functools
 from lib.model.nets.generator.encoder_decoder_utils import *
 
+import pdb
 
 def UNetLike_DownStep5(input_shape, encoder_input_channels, decoder_output_channels, decoder_out_activation, encoder_norm_layer, decoder_norm_layer, upsample_mode, decoder_feature_out=False):
   # 64, 32, 16, 8, 4
@@ -197,6 +198,7 @@ class UNetLike_DenseDimensionNet(nn.Module):
 class MultiView_UNetLike_DenseDimensionNet(nn.Module):
   def __init__(self, view1Model, view2Model, view1Order, view2Order, backToSub, decoder_output_channels, decoder_out_activation, decoder_block_list=None, decoder_norm_layer=nn.BatchNorm3d, upsample_mode='nearest'):
     super(MultiView_UNetLike_DenseDimensionNet, self).__init__()
+    #pdb.set_trace()
     self.view1Model = view1Model
     self.view2Model = view2Model
     self.view1Order = view1Order
@@ -264,11 +266,13 @@ class MultiView_UNetLike_DenseDimensionNet(nn.Module):
   
   def forward(self, input):
     # only support two views
+    # pdb.set_trace()
     assert len(input) == 2
     # View 1 encoding process
     view1_encoder_feature = self.view1Model.encoder_layer(input[0])
     view1_next_input = view1_encoder_feature
     for i in range(self.view1Model.n_downsampling):
+      #pdb.set_trace()
       setattr(self.view1Model, 'feature_linker' + str(i), getattr(self.view1Model, 'linker_layer' + str(i))(view1_next_input))
       view1_next_input = getattr(self.view1Model, 'encoder_layer'+str(i))(view1_next_input)
     # View 2 encoding process
@@ -279,6 +283,7 @@ class MultiView_UNetLike_DenseDimensionNet(nn.Module):
               getattr(self.view2Model, 'linker_layer' + str(i))(view2_next_input))
       view2_next_input = getattr(self.view2Model, 'encoder_layer' + str(i))(view2_next_input)
     # View 1 decoding process Part1
+    #pdb.set_trace()
     view1_next_input = self.view1Model.base_link(view1_next_input.view(view1_next_input.size(0), -1))
     view1_next_input = view1_next_input.view(view1_next_input.size(0), self.view1Model.decoder_channel_list[-1], self.view1Model.decoder_begin_size,
                                              self.view1Model.decoder_begin_size, self.view1Model.decoder_begin_size)
@@ -288,6 +293,7 @@ class MultiView_UNetLike_DenseDimensionNet(nn.Module):
                                              self.view2Model.decoder_begin_size, self.view2Model.decoder_begin_size)
 
     view_next_input = None
+    #pdb.set_trace()
     # View 1 and 2 decoding process Part2
     for i in range(self.n_downsampling - 1, -2, -1):
       if i == (self.n_downsampling - 1):
@@ -296,6 +302,7 @@ class MultiView_UNetLike_DenseDimensionNet(nn.Module):
         ########### MultiView Fusion
         # Method One: Fused feature back to sub-branch
         if self.backToSub:
+          #pdb.set_trace()
           view_avg = self.transposed_layer(view1_next_input, view2_next_input) / 2
           view1_next_input = view_avg.permute(*self.view1Order)
           view2_next_input = view_avg.permute(*self.view2Order)
@@ -325,5 +332,5 @@ class MultiView_UNetLike_DenseDimensionNet(nn.Module):
         view1_next_input = getattr(self.view1Model, 'decoder_layer' + str(i))(view1_next_input)
         view2_next_input = getattr(self.view2Model, 'decoder_layer' + str(i))(view2_next_input)
 
-
+    #pdb.set_trace()
     return self.view1Model.decoder_layer(view1_next_input), self.view2Model.decoder_layer(view2_next_input), self.decoder_layer(view_next_input)
