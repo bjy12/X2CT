@@ -67,10 +67,6 @@ CTGAN:
   auxiliary_loss: 'mse'
   auxiliary_lambda: 0.
 
-
-
-
-
 TD_GAN:
   idt_lambda: 1.
   restruction_loss: 'mse'
